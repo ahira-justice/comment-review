@@ -16,7 +16,9 @@ def index(request):
 
         if helper.getURLType() is None:
             messages.add_message(
-                request, messages.ERROR, 'Not an Amazon product link or a YouTube video link')
+                request, messages.ERROR,
+                'Not an Amazon product link or a YouTube video link'
+            )
         elif helper.getURLType() is requesthelper.URLType.YOUTUBE:
             file_name = 'comments-{}{}'.format(url.split('?v=')[1], '.csv')
             writer = csvwriter.CSVWriter(

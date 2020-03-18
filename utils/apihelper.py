@@ -8,6 +8,8 @@ class APIHelper():
 
     def getJSONAsDict(self):
         assert self.response.status_code == requests.codes.ok, 'GET {} {}'.format(
-            self.url, self.response.status_code)
+            self.url,
+            self.response.status_code
+        )
 
         return self.response.json()
