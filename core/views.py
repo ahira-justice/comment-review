@@ -8,6 +8,9 @@ import os
 
 
 def index(request):
+    file_name = ''
+    context = {}
+
     if request.method == "POST":
         url = request.POST.get('url')
         helper = requesthelper.RequestHelper(url)
@@ -22,7 +25,7 @@ def index(request):
         elif helper.getURLType() is requesthelper.URLType.YOUTUBE:
             file_name = 'comments-{}{}'.format(url.split('?v=')[1], '.csv')
             writer = csvwriter.CSVWriter(
-                os.path.join(settings.STATIC_ROOT, file_name), headers
+                os.path.join(settings.MEDIA_ROOT, file_name), headers
             )
 
             unfiltered_result = helper.getResult()
@@ -38,4 +41,5 @@ def index(request):
 
             writer.write(result)
 
-    return render(request, 'core/index.html')
+    context = {'file_name': file_name, 'MEDIA_URL': settings.MEDIA_URL}
+    return render(request, 'core/index.html', context=context)

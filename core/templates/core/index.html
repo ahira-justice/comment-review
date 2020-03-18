@@ -24,4 +24,10 @@
 
 </div>
 
+<div class="container pt-5" style="width:30%;">
+    {% if file_name %}
+    <p><a href="{{MEDIA_URL}}{{file_name}}"> Download </a> {{ file_name }} </p>
+    {%endif%}
+</div>
+
 {% endblock %}
