@@ -4,7 +4,6 @@ from dateutil import parser as dateparser
 import requests
 import json
 import re
-import time
 
 
 class Scraper():
@@ -75,7 +74,7 @@ class Scraper():
 
             try:
                 review_posted_date = dateparser.parse(''.join(raw_review_posted_date[0].split()[-3:])).strftime('%d %b %Y')
-            except:
+            except ValueError:
                 review_posted_date = None
 
             review_text = ' '.join(' '.join(raw_review_text1).split())
