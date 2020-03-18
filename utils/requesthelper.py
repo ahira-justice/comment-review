@@ -3,6 +3,7 @@ import re
 
 from enum import Enum
 from utils.apihelper import APIHelper
+from utils.scraper import Scraper
 
 
 class URLType(Enum):
@@ -16,10 +17,15 @@ class RequestHelper():
         self.url_type = self.getURLType()
 
         self.api_helper = None
+        self.scraper = None
+
         self.YOUTUBE_COMMENTS_API = 'https://www.googleapis.com/youtube/v3/commentThreads'
 
     def configureAPIHelper(self, url, payload=None):
         self.api_helper = APIHelper(url, payload)
+
+    def configureScraper(self, url):
+        self.scraper = Scraper(url)
 
     def getURLType(self):
         amazon_pattern = re.compile(
@@ -46,6 +52,11 @@ class RequestHelper():
 
     def getAmazonReviews(self):
         package = {}
+
+        self.configureScraper(self.url)
+        package = self.scraper.getReviewsAsDict()
+
+        assert 'error' not in package.keys(), package['error']
 
         return package
 

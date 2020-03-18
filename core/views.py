@@ -22,11 +22,17 @@ def index(request):
                 request, messages.ERROR,
                 'Not an Amazon product link or a YouTube video link'
             )
+
+            return render(request, 'core/index.html')
+
+        elif helper.getURLType() is requesthelper.URLType.AMAZON:
+            file_name = 'reviews-{}{}'.format(_.getASIN(url), '.csv')
+
+            unfiltered_result = helper.getResult()
+            result = _.extractReviews(unfiltered_result)
+
         elif helper.getURLType() is requesthelper.URLType.YOUTUBE:
             file_name = 'comments-{}{}'.format(url.split('?v=')[1], '.csv')
-            writer = csvwriter.CSVWriter(
-                os.path.join(settings.MEDIA_ROOT, file_name), headers
-            )
 
             unfiltered_result = helper.getResult()
             result = _.extractComments(unfiltered_result)
@@ -39,7 +45,10 @@ def index(request):
                 else:
                     break
 
-            writer.write(result)
+        writer = csvwriter.CSVWriter(
+            os.path.join(settings.MEDIA_ROOT, file_name), headers
+        )
+        writer.write(result)
 
     context = {'file_name': file_name, 'MEDIA_URL': settings.MEDIA_URL}
     return render(request, 'core/index.html', context=context)
